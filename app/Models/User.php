@@ -38,4 +38,20 @@ class User extends Authenticatable
     ];
 
     protected $table = 'users';
+
+
+    /**
+     * [gravatar 获取头像]
+     * @Author   By_Wlaim
+     * @DateTime 2019-09-22T15:05:01+0800
+     * @param    string      $size [default = 100]
+     * strtolower      方法将邮箱转换为小写
+     * trim         方法剔除邮箱的前后空白内容
+     * $this->attributes['email'] 获取到用户的邮箱；
+     * @return   [type]               [description]
+     */
+    public function gravatar($size = '100'){
+        $hash = md5(strtolower(trim($this->attributes['email'])));
+        return "http://www.gravatar.com/avatar/$hash?s=$size";
+    }
 }

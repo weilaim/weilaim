@@ -8,7 +8,8 @@
                 <h5>注册</h5>
             </div>
             <div class="card-body">
-                <form action="{{route('users.store')}}" method="POST"></form>
+                <form action="{{route('users.store')}}" method="POST">
+                    {{csrf_field()}}
                 <div class="form-group">
                     <label for="name">名称：</label>
                     <input type="text" name="name" class="form-control" value="{{old('name')}}">
@@ -35,6 +36,8 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">注册</button>
+
+                </form>
             </div>
         </div>
     </div>

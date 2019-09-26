@@ -11,8 +11,9 @@ class UsersController extends Controller
     //
 
     public function __construct(){
+        //白名单
         $this->middleware('auth',[
-            'except'=>['show','create','edit']
+            'except'=>['create','show','store','index']
         ]);
 
         /**
@@ -53,9 +54,12 @@ class UsersController extends Controller
             'email'=>$request->email,
             'password'=>bcrypt($request->password),
         ]);
-        Auth::login();
+
+        //注册后自动登陆
+        Auth::login($user);
         session()->flash('success','欢迎，您将在这里开启一段新的旅程~');
         return redirect()->route('users.show',[$user]);
+
     }
 
     public function edit(User $user){
@@ -91,4 +95,25 @@ class UsersController extends Controller
 
         return redirect()->route('users.show', $user);
     }
+
+    public function index(){
+        $users = User::paginate(10);
+        return view('users.index',compact('users'));
+    }
+
+
+    public function destroy(User $user){
+        $user->delete();
+        session()->flash('success','删除用户成功!');
+        return back();
+    }
+
+
+
+
+
+
+
+
+
 }

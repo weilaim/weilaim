@@ -10,6 +10,20 @@ class UsersController extends Controller
 {
     //
 
+    public function __construct(){
+        $this->middleware('auth',[
+            'except'=>['show','create','edit']
+        ]);
+
+        /**
+         * 只让未登录用户访问注册页面：
+         */
+        $this->middleware('guest',[
+            'only'=>['create']
+        ]);
+    }
+
+
     public function create(){
         return view('users.create');
     }
@@ -49,8 +63,18 @@ class UsersController extends Controller
 
     }
 
+    /**
+     * @param User $user
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws \Illuminate\Validation\ValidationException
+     * 注册授权策略--$this->authorize 作用（用户只能编辑自己的资料）
+     */
     public function update(User $user, Request $request)
     {
+        //自动授权
+        $this->authorize('update',$user);
         $this->validate($request, [
             'name' => 'required|max:50',
             'password' => 'nullable|confirmed|min:6'
